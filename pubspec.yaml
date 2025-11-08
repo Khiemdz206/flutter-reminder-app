@@ -1,0 +1,25 @@
+name: khiem_dz_it2_app
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  english_words: ^4.0.0
+  provider: ^6.1.5
+  shared_preferences: ^2.0.15
+  table_calendar: ^3.2.0
+  intl: ^0.20.2
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+ 
+flutter:                     # 👈 chỉ một lần duy nhất
+  uses-material-design: true
