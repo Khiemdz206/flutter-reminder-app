@@ -114,43 +114,61 @@ class _NoteListScreenState extends State<NoteListScreen> {
       body: _filteredNotes.isEmpty
           ? const Center(child: Text('Không tìm thấy ghi chú nào.'))
           : ListView.builder(
+              // Thêm padding cho ListView để các Card không bị dính vào cạnh màn hình
+              padding: const EdgeInsets.all(8.0),
               itemCount: _filteredNotes.length,
               itemBuilder: (context, index) {
                 final note = _filteredNotes[index];
-                return ListTile(
-                  title: Text(
-                       note.title.trim().isNotEmpty ? note.title : note.content,
-                    ),
-                  subtitle: Text(
-                          note.title.trim().isNotEmpty ? note.content : "",
-                           maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                // *** THAY ĐỔI BẮT ĐẦU TỪ ĐÂY ***
+                // Bọc ListTile trong một Card để tạo hiệu ứng nổi và riêng biệt
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0), // Tạo khoảng cách dọc giữa các note
+                  elevation: 2.0, // Độ nổi (bóng đổ) của card
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Bo tròn các góc
                   ),
-                  onTap: () async {
-                    // Tìm chỉ mục gốc của ghi chú trong danh sách _notes
-                    final originalIndex = _notes.indexWhere((n) => note.id == note.id);
-                    if (originalIndex == -1) return;
+                  child: ListTile(
+                    // Thêm một chút padding bên trong để nội dung không bị sát viền
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    title: note.title.trim().isNotEmpty
+                    ? Text(
+                      note.title.trim(),
+                      style: const TextStyle(fontWeight: FontWeight.bold), // In đậm tiêu đề
+                    )
+                    : null,
+                    subtitle: Text(
+                      note.content,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    onTap: () async {
+                      // Sửa lỗi logic: Tìm index bằng ID của note được nhấn
+                      final originalIndex = _notes.indexWhere((n) => n.id == note.id);
+                      if (originalIndex == -1) return;
 
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NoteDetailScreen(note: note),
-                      ),
-                    );
-                    if (result != null && result is Note) {
-                      setState(() {
-                        _notes[originalIndex] = result;
-                        // Cập nhật lại danh sách đã lọc
-                        _filterNotes();
-                      });
-                      await _saveNotes();
-                    }
-                  },
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () => _deleteNote(index),
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          // Truyền đúng note từ danh sách gốc `_notes`
+                          builder: (context) => NoteDetailScreen(note: _notes[originalIndex]),
+                        ),
+                      );
+                      if (result != null && result is Note) {
+                        setState(() {
+                          _notes[originalIndex] = result;
+                          // Cập nhật lại danh sách đã lọc
+                          _filterNotes();
+                        });
+                        await _saveNotes();
+                      }
+                    },
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      onPressed: () => _deleteNote(index),
+                    ),
                   ),
                 );
+                // *** THAY ĐỔI KẾT THÚC TẠI ĐÂY ***
               },
             ),
       floatingActionButton: FloatingActionButton(
@@ -170,8 +188,8 @@ class _NoteListScreenState extends State<NoteListScreen> {
             await _saveNotes();
           }
         },
-        child: const Icon(Icons.add),
         tooltip: 'Tạo ghi chú mới',
+        child: const Icon(Icons.add),
       ),
     );
   }

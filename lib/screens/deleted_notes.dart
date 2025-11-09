@@ -80,15 +80,26 @@ class _DeletedNoteScreenState extends State<DeletedNoteScreen> {
               itemCount: _deletedNotes.length,
               itemBuilder: (context, index) {
                 // BƯỚC 6: CẬP NHẬT GIAO DIỆN
-                final note = _deletedNotes[index]; // Lấy ra đối tượng Note
-                return ListTile(
-                  title: Text(note.title), // <-- Hiển thị thuộc tính title
-                  // Bạn có thể thêm subtitle nếu muốn xem trước nội dung
-                  // subtitle: Text(
-                  //   Document.fromJson(jsonDecode(note.contentJson)).toPlainText(),
-                  //   maxLines: 1,
-                  //   overflow: TextOverflow.ellipsis,
-                  // ),
+                final note = _deletedNotes[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 4.0),
+                  elevation: 2.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Bo tròn các góc
+                  ),
+                // Lấy ra đối tượng Note
+                child: ListTile(
+                  title: note.title.trim().isNotEmpty
+                  ? Text(
+                    note.title.trim(),
+                      style: const TextStyle(fontWeight: FontWeight.bold), // In đậm tiêu đề
+                  )
+                  : null,
+                  subtitle: Text(
+                    note.content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ), 
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -103,6 +114,7 @@ class _DeletedNoteScreenState extends State<DeletedNoteScreen> {
                       ),
                     ],
                   ),
+                ),
                 );
               },
             ),

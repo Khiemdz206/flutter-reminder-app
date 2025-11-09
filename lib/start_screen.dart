@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart'; // Thay thế material.dart bằng cupertino.dart
-import 'package:flutter/material.dart'; // Giữ lại để dùng cho Navigator (tùy chọn)
 import 'package:khiem_dz_it2_app/screens/note_detail_screen.dart';
 import 'screens/note_list_screen.dart';
 import 'screens/deleted_notes.dart';
